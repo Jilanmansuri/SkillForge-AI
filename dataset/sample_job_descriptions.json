@@ -1,0 +1,8 @@
+{
+  "jobs": {
+    "Full Stack Developer": "Looking for a seasoned Full Stack Developer. Must have deep expertise in React, MongoDB, Express, and Node.js. Bonus points for AWS, Docker, and TypeScript.",
+    "Frontend Developer": "UI/UX focused Frontend Developer. Tech stack: React, TypeScript, Redux, Node.js (basics), and TailwindCSS. Experience with Framer Motion expected.",
+    "Backend Developer": "We need a robust Backend Developer. Focus primarily on Node.js, Express, PostgreSQL, Redis, and System Design patterns. Docker experience is required.",
+    "Data Analyst": "Seeking a Data Analyst Data Scientist hybrid. Requirements: Python, SQL, Tableau, Pandas, and Advanced Statistics. R or Machine Learning is a plus."
+  }
+}

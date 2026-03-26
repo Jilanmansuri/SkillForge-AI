@@ -1,0 +1,18 @@
+{
+  "Full Stack Developer": {
+    "required": ["JavaScript","TypeScript","React","Node.js","Express","MongoDB","PostgreSQL","REST APIs","Git","Docker","AWS","System Design"],
+    "dependencies": { "React": ["JavaScript"], "Express": ["Node.js","JavaScript"], "Docker": ["Linux basics"] }
+  },
+  "Frontend Developer": {
+    "required": ["HTML","CSS","JavaScript","TypeScript","React","Redux","Tailwind CSS","Framer Motion","Web Accessibility","Git","Vite","UI/UX Design"],
+    "dependencies": { "React": ["JavaScript", "HTML", "CSS"], "Redux": ["React"], "Tailwind CSS": ["CSS"] }
+  },
+  "Backend Developer": {
+    "required": ["Node.js","Express","PostgreSQL","MongoDB","Redis","REST APIs","GraphQL","Docker","Kubernetes","AWS","System Design","Git"],
+    "dependencies": { "Express": ["Node.js"], "PostgreSQL": ["SQL"], "GraphQL": ["REST APIs"], "Kubernetes": ["Docker"] }
+  },
+  "Data Analyst": {
+    "required": ["Python","SQL","Pandas","NumPy","Tableau","PowerBI","Excel","Statistics","Machine Learning","Data Visualization","R","Git"],
+    "dependencies": { "Pandas": ["Python"], "Machine Learning": ["Statistics", "Python"], "Tableau": ["Data Visualization"] }
+  }
+}
