@@ -22,17 +22,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
-// Serve static files from the frontend/dist folder in production
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
-  });
-}
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
