@@ -1,6 +1,5 @@
 const express = require('express');
 const multer = require('multer');
-const fs = require('fs');
 const path = require('path');
 const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
@@ -55,7 +54,7 @@ router.post('/upload-resume', upload.single('resume'), async (req, res) => {
 
 // /api/analyze
 router.post('/analyze', async (req, res) => {
-  const { resumeText, role, jobDescriptionText } = req.body;
+  const { resumeText, role } = req.body;
   
   if (!resumeText || !role) {
     return res.status(400).json({ error: 'resumeText and role are required' });
@@ -74,10 +73,17 @@ router.post('/analyze', async (req, res) => {
 
 // /api/generate-roadmap
 router.post('/generate-roadmap', async (req, res) => {
-  const { role, missingSkills, weakSkills, extractedSkills } = req.body;
+  const { role, missingSkills, weakSkills, extractedSkills, gaps } = req.body;
+  const resolvedMissingSkills = missingSkills || gaps?.missingSkills || [];
+  const resolvedWeakSkills = weakSkills || gaps?.weakSkills || [];
 
   try {
-    const roadmapData = await generateRoadmap(role, missingSkills || [], weakSkills || [], extractedSkills || []);
+    const roadmapData = await generateRoadmap(
+      role,
+      resolvedMissingSkills,
+      resolvedWeakSkills,
+      extractedSkills || []
+    );
     res.json(roadmapData);
   } catch (error) {
     res.status(500).json({ error: 'Roadmap generation failed' });

@@ -3,7 +3,7 @@ const Anthropic = require('@anthropic-ai/sdk');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const AI_PROVIDER = process.env.AI_PROVIDER || 'openai'; // default to openai
+const AI_PROVIDER = (process.env.AI_PROVIDER || 'mock').toLowerCase();
 
 let openai = null;
 let anthropic = null;

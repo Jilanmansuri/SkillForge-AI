@@ -17,6 +17,7 @@ interface RoadmapStep {
 export default function Timeline({ steps }: { steps: RoadmapStep[] }) {
   const [completed, setCompleted] = useState<Set<number>>(new Set());
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
+  const completionPercent = steps.length > 0 ? (completed.size / steps.length) * 100 : 0;
 
   const toggleComplete = (stepId: number) => {
     setCompleted(prev => {
@@ -51,7 +52,7 @@ export default function Timeline({ steps }: { steps: RoadmapStep[] }) {
       <div className="w-full h-1.5 bg-[#222] rounded-full mb-8 overflow-hidden">
         <div 
           className="h-full bg-indigo-500 transition-all duration-300" 
-          style={{ width: `${(completed.size / steps.length) * 100}%` }}
+          style={{ width: `${completionPercent}%` }}
         />
       </div>
 

@@ -139,7 +139,7 @@ export default function UploadPage() {
       
       localStorage.setItem('onboarding_roadmap', JSON.stringify(roadmapData));
 
-      setLoadingStage(4); // Fully complete
+      setLoadingStage(3); // Fully complete
       setTimeout(() => {
         setIsLoading(false);
         navigate('/dashboard');

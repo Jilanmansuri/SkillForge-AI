@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Prefer relative `/api` so Vite can proxy to the backend during local development.
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').trim()
 

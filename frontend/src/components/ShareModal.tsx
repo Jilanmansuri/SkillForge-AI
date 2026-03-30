@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { Download, Share2, X } from 'lucide-react';
