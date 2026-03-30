@@ -6,7 +6,8 @@ const routes = require('./routes/api');
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors()); // Allow all websites (CORS)
+
 app.use(express.json());
 
 const interviewRoutes = require('./routes/interview');

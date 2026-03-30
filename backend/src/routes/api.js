@@ -81,14 +81,22 @@ router.post('/generate-roadmap', async (req, res) => {
 
 // /api/samples/resumes
 router.get('/samples/resumes', (req, res) => {
-  const data = require('../../../dataset/sample_resumes.json');
-  res.json(data);
+  try {
+    const data = require('../../data/sample_resumes.json');
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Sample resumes not found. Ensure dataset files are in backend/data/' });
+  }
 });
 
 // /api/samples/job-descriptions
 router.get('/samples/job-descriptions', (req, res) => {
-  const data = require('../../../dataset/sample_job_descriptions.json');
-  res.json(data);
+  try {
+    const data = require('../../data/sample_job_descriptions.json');
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Sample job descriptions not found. Ensure dataset files are in backend/data/' });
+  }
 });
 
 module.exports = router;
