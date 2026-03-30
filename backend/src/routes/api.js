@@ -8,7 +8,8 @@ const { extractSkills, generateRoadmap } = require('../utils/anthropic');
 const skillsData = require('../../data/skills.json');
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // /api/upload-resume
 router.post('/upload-resume', upload.single('resume'), async (req, res) => {
@@ -21,19 +22,14 @@ router.post('/upload-resume', upload.single('resume'), async (req, res) => {
 
     if (req.file) {
       const ext = path.extname(req.file.originalname).toLowerCase();
-      const filePath = req.file.path;
-
+      
       if (ext === '.pdf') {
-        const dataBuffer = fs.readFileSync(filePath);
-        const data = await pdfParse(dataBuffer);
+        const data = await pdfParse(req.file.buffer);
         resumeText = data.text;
       } else if (ext === '.docx') {
-        const result = await mammoth.extractRawText({ path: filePath });
+        const result = await mammoth.extractRawText({ buffer: req.file.buffer });
         resumeText = result.value;
       }
-      
-      // Clean up uploaded file
-      fs.unlinkSync(filePath);
     }
 
     res.json({

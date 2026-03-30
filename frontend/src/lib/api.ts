@@ -38,7 +38,7 @@ export async function getJobDescriptionSampleById(id: string) {
 
 export async function uploadResume(file: File) {
   const form = new FormData()
-  form.append('file', file)
+  form.append('resume', file)
 
   const res = await fetch(`${API_BASE}/upload-resume`, {
     method: 'POST',
