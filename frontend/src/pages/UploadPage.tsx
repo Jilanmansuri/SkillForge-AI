@@ -3,6 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { UploadCloud, FileText } from 'lucide-react';
 import RoleCard from '../components/RoleCard';
 import LoadingOverlay from '../components/LoadingOverlay';
+import { 
+  listResumeSamples, 
+  listJobDescriptionSamples, 
+  extractLinkedIn, 
+  uploadResume, 
+  analyzeResume, 
+  generateRoadmap 
+} from '../lib/api';
 
 export default function UploadPage() {
   const navigate = useNavigate();
@@ -49,8 +57,7 @@ export default function UploadPage() {
 
   const loadSampleResume = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/samples/resumes');
-      const data = await res.json();
+      const data = await listResumeSamples();
       if (data.resumes[selectedRole]) {
         setResumeText(data.resumes[selectedRole]);
         setFile(null); // Clear file if sample text is loaded
@@ -62,8 +69,7 @@ export default function UploadPage() {
 
   const loadSampleJD = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/samples/job-descriptions');
-      const data = await res.json();
+      const data = await listJobDescriptionSamples();
       if (data.jobs[selectedRole]) {
         setJobDescription(data.jobs[selectedRole]);
       }
@@ -77,12 +83,7 @@ export default function UploadPage() {
     setExtracting(true);
     setLinkedinDemoMode(false);
     try {
-      const res = await fetch('http://localhost:5000/api/linkedin/extract', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: linkedinUrl })
-      });
-      const data = await res.json();
+      const data = await extractLinkedIn(linkedinUrl);
       setLinkedinSkills(data.extractedSkills || []);
       setResumeText(data.profileText || '');
       if (data.demo) setLinkedinDemoMode(true);
@@ -103,13 +104,7 @@ export default function UploadPage() {
     try {
       // Stage 0: Parsing
       if (file) {
-        const formData = new FormData();
-        formData.append('resume', file);
-        const uploadRes = await fetch('http://localhost:5000/api/upload-resume', {
-          method: 'POST',
-          body: formData,
-        });
-        const uploadData = await uploadRes.json();
+        const uploadData = await uploadResume(file);
         extractedResumeText = uploadData.resumeText;
       } else if (!extractedResumeText) {
         alert("Please provide a resume first.");
@@ -120,12 +115,11 @@ export default function UploadPage() {
       setLoadingStage(1);
       
       // Stage 1: Analyze Skills
-      const analyzeRes = await fetch('http://localhost:5000/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resumeText: extractedResumeText, role: selectedRole, jobDescriptionText: jobDescription }),
+      const analysisData = await analyzeResume({ 
+        resumeText: extractedResumeText, 
+        role: selectedRole, 
+        jobDescriptionText: jobDescription 
       });
-      const analysisData = await analyzeRes.json();
       
       localStorage.setItem('onboarding_analysis', JSON.stringify({ ...analysisData, role: selectedRole }));
 
@@ -135,17 +129,13 @@ export default function UploadPage() {
       setLoadingStage(3);
       
       // Stage 3: Roadmap
-      const roadmapRes = await fetch('http://localhost:5000/api/generate-roadmap', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          role: selectedRole, 
+      const roadmapData = await generateRoadmap({ 
+        role: selectedRole, 
+        gaps: {
           missingSkills: analysisData.missingSkills, 
-          weakSkills: analysisData.weakSkills, 
-          extractedSkills: analysisData.extractedSkills 
-        }),
+          weakSkills: analysisData.weakSkills 
+        }
       });
-      const roadmapData = await roadmapRes.json();
       
       localStorage.setItem('onboarding_roadmap', JSON.stringify(roadmapData));
 

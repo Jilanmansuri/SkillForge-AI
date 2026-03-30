@@ -75,3 +75,38 @@ export async function generateRoadmap(payload: {
   return handleJson(res)
 }
 
+export async function extractLinkedIn(url: string) {
+  const res = await fetch(`${API_BASE}/linkedin/extract`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  })
+  return handleJson(res)
+}
+
+export async function generateInterview(payload: {
+  role: string
+  missingSkills: string[]
+  weakSkills: string[]
+  extractedSkills: string[]
+}) {
+  const res = await fetch(`${API_BASE}/interview/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  return handleJson(res)
+}
+
+export async function evaluateInterview(payload: {
+  role: string
+  questions: any[]
+  answers: string[]
+}) {
+  const res = await fetch(`${API_BASE}/interview/evaluate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  return handleJson(res)
+}

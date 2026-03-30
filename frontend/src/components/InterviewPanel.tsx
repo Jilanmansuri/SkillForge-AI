@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
 import { Target, Loader2, Play } from 'lucide-react';
 import { cn } from './SkillPill';
+import { generateInterview, evaluateInterview } from '../lib/api';
 
 interface InterviewPanelProps {
   role: string;
@@ -21,12 +22,7 @@ export default function InterviewPanel({ role, missingSkills, weakSkills, extrac
   const startInterview = async () => {
     setPhase('loading');
     try {
-      const res = await fetch('http://localhost:5000/api/interview/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role, missingSkills, weakSkills, extractedSkills }),
-      });
-      const data = await res.json();
+      const data = await generateInterview({ role, missingSkills, weakSkills, extractedSkills });
       setQuestions(data.questions);
       setAnswers([]);
       setCurrentQ(0);
@@ -51,12 +47,7 @@ export default function InterviewPanel({ role, missingSkills, weakSkills, extrac
     } else {
       setPhase('evaluating');
       try {
-        const res = await fetch('http://localhost:5000/api/interview/evaluate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ role, questions, answers: newAnswers }),
-        });
-        const data = await res.json();
+        const data = await evaluateInterview({ role, questions, answers: newAnswers });
         setResults(data);
         setPhase('results');
       } catch (e) {
