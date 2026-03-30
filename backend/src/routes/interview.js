@@ -1,5 +1,5 @@
 const express = require('express');
-const { generateQuestions, evaluateAnswers } = require('../utils/anthropic');
+const { generateQuestions, evaluateAnswers } = require('../utils/aiProvider');
 
 const router = express.Router();
 

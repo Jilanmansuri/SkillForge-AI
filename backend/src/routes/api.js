@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
-const { extractSkills, generateRoadmap } = require('../utils/anthropic');
+const { extractSkills, generateRoadmap } = require('../utils/aiProvider');
 const skillsData = require('../../data/skills.json');
 
 const router = express.Router();
@@ -24,8 +24,17 @@ router.post('/upload-resume', upload.single('resume'), async (req, res) => {
       const ext = path.extname(req.file.originalname).toLowerCase();
       
       if (ext === '.pdf') {
-        const data = await pdfParse(req.file.buffer);
-        resumeText = data.text;
+        try {
+          const data = await pdfParse(req.file.buffer);
+          if (!data || !data.text) {
+            throw new Error("PDF parse result was empty.");
+          }
+          resumeText = data.text;
+          console.log(`Successfully extracted ${resumeText.length} characters from PDF.`);
+        } catch (pdfError) {
+          console.error("PDF Parsing Error:", pdfError.message);
+          return res.status(422).json({ error: 'Could not extract text from PDF. It might be an image-only PDF or corrupt.' });
+        }
       } else if (ext === '.docx') {
         const result = await mammoth.extractRawText({ buffer: req.file.buffer });
         resumeText = result.value;
