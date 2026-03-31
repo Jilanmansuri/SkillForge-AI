@@ -75,6 +75,9 @@ async function getAIResponse(prompt, type) {
     throw new Error("No valid AI provider or API key found.");
   } catch (error) {
     console.error(`AI Provider (${AI_PROVIDER}) Error:`, error.message);
+    if (AI_PROVIDER !== 'mock') {
+      throw error;
+    }
     return FALLBACKS[type];
   }
 }

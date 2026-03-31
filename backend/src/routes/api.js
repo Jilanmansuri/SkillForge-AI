@@ -67,7 +67,7 @@ router.post('/analyze', async (req, res) => {
     const analysis = await extractSkills(resumeText, role, requiredSkills);
     res.json(analysis);
   } catch (error) {
-    res.status(500).json({ error: 'Analysis failed' });
+    res.status(500).json({ error: error.message || 'Analysis failed' });
   }
 });
 
@@ -86,7 +86,7 @@ router.post('/generate-roadmap', async (req, res) => {
     );
     res.json(roadmapData);
   } catch (error) {
-    res.status(500).json({ error: 'Roadmap generation failed' });
+    res.status(500).json({ error: error.message || 'Roadmap generation failed' });
   }
 });
 
