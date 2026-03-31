@@ -11,10 +11,14 @@ let anthropic = null;
 if (AI_PROVIDER === 'openai') {
   openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY || 'dummy_key',
+    timeout: 15000,
+    maxRetries: 1,
   });
 } else if (AI_PROVIDER === 'anthropic') {
   anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY || 'dummy_key',
+    timeout: 15000,
+    maxRetries: 1,
   });
 }
 
